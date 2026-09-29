@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#fff8fb">
+	<title>Nueve mesesotes</title>
+	<style>
+		:root {
+			color-scheme: light;
+			--paper: #fff8fb;
+			--ink: #3e293c;
+			--muted: #806b7d;
+			--rose: #d98cae;
+			--rose-light: #f5d8e5;
+			--lilac: #b9a5d5;
+			--lilac-light: #e8e0f3;
+			--green: #8ba28a;
+			--serif: "Bodoni MT", "Didot", "Times New Roman", serif;
+			--sans: "Trebuchet MS", "Gill Sans", sans-serif;
+		}
+
+		* { box-sizing: border-box; }
+
+		html { scroll-behavior: smooth; }
+
+		body {
+			min-width: 320px;
+			margin: 0;
+			color: var(--ink);
+			background:
+				radial-gradient(ellipse at 3% 18%, #f7e8f0 0, transparent 32rem),
+				radial-gradient(ellipse at 96% 83%, #ebe6f5 0, transparent 34rem),
+				var(--paper);
+			font-family: var(--sans);
+		}
+
+		button { font: inherit; }
+
+		.page {
+			position: relative;
+			overflow: hidden;
+			min-height: 100svh;
+			isolation: isolate;
+		}
+
+		.page::before,
+		.page::after {
+			position: absolute;
+			z-index: -1;
+			width: 18rem;
+			aspect-ratio: 1;
+			border: 1px solid rgb(185 165 213 / 27%);
+			border-radius: 50%;
+			content: "";
+			pointer-events: none;
+		}
+
+		.page::before { top: 8%; left: -13rem; box-shadow: 0 0 0 2rem rgb(185 165 213 / 5%), 0 0 0 4rem rgb(185 165 213 / 4%); }
+		.page::after { right: -13rem; bottom: 6%; box-shadow: 0 0 0 2rem rgb(217 140 174 / 5%), 0 0 0 4rem rgb(217 140 174 / 4%); }
+
+		.background-tulip {
+			position: absolute;
+			z-index: -1;
+			top: 31%;
+			left: -30px;
+			width: clamp(125px, 15vw, 185px);
+			height: auto;
+			opacity: .62;
+			transform-origin: 50% 95%;
+			animation: tulip-sway 8s ease-in-out infinite;
+			pointer-events: none;
+		}
+
+		.topline {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: min(1160px, calc(100% - 64px));
+			margin: 0 auto;
+			padding: 29px 0;
+			color: var(--muted);
+			font-size: 11px;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			animation: arrive .8s both;
+		}
+
+		.topline__mark { color: var(--rose); font-size: 16px; }
+
+		.hero {
+			display: grid;
+			grid-template-columns: minmax(360px, .88fr) minmax(400px, 1.12fr);
+			align-items: center;
+			gap: clamp(44px, 8vw, 112px);
+			width: min(1160px, calc(100% - 64px));
+			min-height: min(690px, calc(100svh - 80px));
+			margin: 0 auto;
+			padding: 18px 0 54px;
+		}
+
+		.copy {
+			position: relative;
+			z-index: 1;
+			padding: 12px 0 30px;
+			animation: arrive .9s .12s both;
+		}
+
+		.eyebrow {
+			display: flex;
+			align-items: center;
+			gap: 13px;
+			margin: 0 0 25px;
+			color: #986b8a;
+			font-size: 11px;
+			letter-spacing: 2.6px;
+			text-transform: uppercase;
+		}
+
+		.eyebrow::before { width: 30px; height: 1px; background: var(--rose); content: ""; }
+
+		h1 {
+			max-width: 570px;
+			margin: 0;
+			font-family: var(--serif);
+			font-size: clamp(58px, 7.7vw, 102px);
+			font-weight: 400;
+			line-height: .91;
+		}
+
+		h1 span { display: block; color: #b783a4; font-style: italic; }
+
+		.intro {
+			max-width: 390px;
+			margin: 27px 0 0;
+			color: var(--muted);
+			font-family: var(--serif);
+			font-size: 20px;
+			line-height: 1.6;
+		}
+
+		.months {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			margin: 29px 0 31px;
+			color: #79556f;
+		}
+
+		.months__number {
+			font-family: var(--serif);
+			font-size: 66px;
+			line-height: .9;
+			color: var(--rose);
+		}
+
+		.months__label { max-width: 104px; font-size: 10px; letter-spacing: 2px; line-height: 1.7; text-transform: uppercase; }
+
+		.open-letter {
+			display: inline-flex;
+			align-items: center;
+			gap: 13px;
+			min-height: 52px;
+			padding: 0 21px;
+			border: 1px solid #bd8da9;
+			border-radius: 2px;
+			color: #684a61;
+			background: #fff9fc;
+			cursor: pointer;
+			font-size: 12px;
+			letter-spacing: .5px;
+			transition: color .2s ease, background .2s ease, transform .2s ease;
+		}
+
+		.open-letter:hover { color: white; background: #a77a9a; transform: translateY(-2px); }
+		.open-letter:focus-visible { outline: 3px solid #c6b3dd; outline-offset: 4px; }
+		.open-letter__heart { color: #c7789f; font-size: 17px; }
+		.open-letter:hover .open-letter__heart { color: white; }
+
+		.letter {
+			max-width: 410px;
+			margin-top: 24px;
+			padding: 20px 22px;
+			border-left: 2px solid #d5c5e4;
+			background: rgb(255 255 255 / 58%);
+			animation: unfold .55s both;
+		}
+
+		.letter[hidden] { display: none; }
+		.letter p { margin: 0; color: #765e72; font-family: var(--serif); font-size: 17px; line-height: 1.7; }
+		.letter .signoff { margin-top: 13px; color: #aa7394; font-style: italic; }
+
+		.florals {
+			position: relative;
+			min-height: 570px;
+			animation: arrive 1s .2s both;
+		}
+
+		.photo {
+			position: absolute;
+			display: block;
+			overflow: hidden;
+			margin: 0;
+			border: 12px solid white;
+			background: #eee3ec;
+			box-shadow: 0 22px 55px rgb(90 59 80 / 18%);
+		}
+
+		.photo__slide {
+			position: absolute;
+			inset: 0;
+			opacity: 0;
+			transition: opacity 1s ease;
+		}
+
+		.photo__slide.is-active { opacity: 1; }
+		.photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+		.photo--tulips {
+			top: 5%;
+			left: 12%;
+			width: 78%;
+			height: 82%;
+			transform: rotate(2deg);
+		}
+
+		.gallery-dots {
+			position: absolute;
+			bottom: 5%;
+			left: 50%;
+			display: flex;
+			gap: 9px;
+			transform: translateX(-50%);
+		}
+
+		.gallery-dots button {
+			width: 10px;
+			height: 10px;
+			padding: 0;
+			border: 1px solid #9b718d;
+			border-radius: 50%;
+			background: #fff8fb;
+			cursor: pointer;
+			transition: background .25s ease, transform .25s ease;
+		}
+
+		.gallery-dots button[aria-pressed="true"] {
+			background: #a77a9a;
+			transform: scale(1.2);
+		}
+
+		.gallery-dots button:focus-visible {
+			outline: 2px solid #684a61;
+			outline-offset: 3px;
+		}
+
+		.scroll-hint {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 13px;
+			padding: 0 24px 25px;
+			color: #9b8497;
+			font-size: 10px;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+		}
+
+		.scroll-hint::before,
+		.scroll-hint::after { width: 44px; height: 1px; background: #ddc8d9; content: ""; }
+
+		.keepsake {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: clamp(18px, 5vw, 64px);
+			min-height: 120px;
+			padding: 28px 24px;
+			border-top: 1px solid rgb(185 165 213 / 34%);
+			color: #866d82;
+			background: rgb(255 255 255 / 33%);
+			font-family: var(--serif);
+			font-size: 17px;
+			font-style: italic;
+			text-align: center;
+		}
+
+		.keepsake__flower { color: #bb8db4; font-size: 22px; }
+
+		.petal {
+			position: fixed;
+			z-index: 5;
+			top: -24px;
+			left: var(--left);
+			width: 12px;
+			height: 17px;
+			border-radius: 80% 10% 80% 10%;
+			background: var(--petal-color);
+			pointer-events: none;
+			animation: fall var(--duration) ease-in var(--delay) forwards;
+		}
+
+		@keyframes arrive {
+			from { opacity: 0; translate: 0 18px; }
+			to { opacity: 1; translate: 0 0; }
+		}
+
+		@keyframes unfold {
+			from { opacity: 0; translate: 0 -8px; }
+			to { opacity: 1; translate: 0 0; }
+		}
+
+		@keyframes sway {
+			0%, 100% { transform: rotate(-6deg); }
+			50% { transform: rotate(7deg); }
+		}
+
+		@keyframes tulip-sway {
+			0%, 100% { transform: rotate(-2deg); }
+			50% { transform: rotate(2deg); }
+		}
+
+		@keyframes fall {
+			to { opacity: 0; transform: translate3d(38px, 105vh, 0) rotate(460deg); }
+		}
+
+		@media (min-width: 1400px) {
+			.hero { min-height: 740px; }
+			.florals { min-height: 640px; }
+		}
+
+		@media (max-width: 800px) {
+			.topline, .hero { width: min(100% - 40px, 600px); }
+			.hero { grid-template-columns: 1fr; gap: 24px; min-height: auto; padding-top: 24px; }
+			.copy { padding-bottom: 0; }
+			h1 { max-width: 490px; font-size: clamp(62px, 14vw, 94px); }
+			.intro { font-size: 18px; }
+			.months { margin: 22px 0 25px; }
+			.florals { width: min(100%, 480px); min-height: 440px; margin: 0 auto; }
+			.photo--tulips { left: 10%; width: 80%; height: 82%; }
+		}
+
+		@media (max-width: 420px) {
+			.topline { width: calc(100% - 36px); padding: 21px 0; font-size: 9px; letter-spacing: 1.6px; }
+			.hero { width: calc(100% - 40px); }
+			.eyebrow { margin-bottom: 21px; font-size: 9px; }
+			h1 { font-size: 61px; }
+			.florals { min-height: 350px; }
+			.keepsake { gap: 12px; font-size: 15px; }
+			.background-tulip { top: 39%; left: -52px; width: 145px; opacity: .48; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+		}
+	</style>
+</head>
+<body>
+	<main class="page">
+		<svg class="background-tulip" viewBox="0 0 180 300" fill="none" aria-hidden="true">
+			<path d="M83 286C84 237 92 193 95 144" stroke="#91a08c" stroke-width="4" stroke-linecap="round"/>
+			<path d="M85 246C56 228 37 232 22 211C50 202 72 216 87 237" fill="#c7d2bd" stroke="#91a08c" stroke-width="2" stroke-linejoin="round"/>
+			<path d="M88 219C111 195 132 194 154 202C138 223 116 230 88 225" fill="#d2dbc9" stroke="#91a08c" stroke-width="2" stroke-linejoin="round"/>
+			<path d="M95 146C68 128 59 103 70 70C92 86 101 108 95 146Z" fill="#d8c5eb" stroke="#b49bcf" stroke-width="2" stroke-linejoin="round"/>
+			<path d="M95 146C87 111 101 82 132 61C141 97 128 125 95 146Z" fill="#cbb5e1" stroke="#b49bcf" stroke-width="2" stroke-linejoin="round"/>
+			<path d="M95 146C58 145 37 127 27 94C62 92 84 108 95 146Z" fill="#e3d5f0" stroke="#b49bcf" stroke-width="2" stroke-linejoin="round"/>
+			<path d="M95 146C106 111 128 97 160 101C150 133 128 148 95 146Z" fill="#ddcbed" stroke="#b49bcf" stroke-width="2" stroke-linejoin="round"/>
+		</svg>
+		<header class="topline" aria-label="Celebración">
+			<span>9 MESESOTES AMOOOR</span>
+			<span class="topline__mark" aria-hidden="true">♡</span>
+			<span>ME GUSTA QUE SIMPRE SEREMOS TU Y YO MI VIDITA</span>
+		</header>
+
+		<section class="hero" aria-labelledby="title">
+			<div class="copy">
+				<p class="eyebrow">Mi lugar favorito siempre siemore es estar en tus bacitos</p>
+				<h1 id="title">Nueve meses <span>de nosotros</span></h1>
+				<p class="intro">Ya me hurge que nos veamos</p>
+				<div class="months" aria-label="9 meses juntos">
+					<span class="months__number">09</span>
+					<span class="months__label">meses<br>juntitos</span>
+				</div>
+				<button class="open-letter" type="button" aria-expanded="false" aria-controls="love-letter">
+					<span class="open-letter__heart" aria-hidden="true">♡</span>
+					<span class="open-letter__text">Abrir mi carta</span>
+					<span aria-hidden="true">↗</span>
+				</button>
+				<aside class="letter" id="love-letter" hidden>
+					<p>Amorcitoo, muschas gracias por siempre estar a mi lado cuando lo necesito eres la mejor del universo y perdon por no haberte podido mandar florecitas amor, pero nunca te olvides que te amo infinitamente mas y que eres la mujer mas hermosa, bella, linda, guapa, preciosa y fuerte de todo el universo y que tu puedes con todo mi vidita, te amo demasiado muchooo </p>
+					<p class="signoff">Te amo hoy, mañana y siempre. ♡</p>
+				</aside>
+			</div>
+
+			<div class="florals" aria-label="Galería de fotos de nuestros recuerdos">
+				<figure class="photo photo--tulips" aria-label="Galería de seis fotos">
+					<div class="photo__slide is-active" aria-hidden="false"><img src="img1.jpeg" alt="Recuerdo 1 de 6" fetchpriority="high"></div>
+					<div class="photo__slide" aria-hidden="true"><img src="img2.jpeg" alt="Recuerdo 2 de 6"></div>
+					<div class="photo__slide" aria-hidden="true"><img src="img3.jpeg" alt="Recuerdo 3 de 6"></div>
+					<div class="photo__slide" aria-hidden="true"><img src="img4.jpeg" alt="Recuerdo 4 de 6"></div>
+					<div class="photo__slide" aria-hidden="true"><img src="img5.jpeg" alt="Recuerdo 5 de 6"></div>
+					<div class="photo__slide" aria-hidden="true"><img src="img6.jpeg" alt="Recuerdo 6 de 6"></div>
+				</figure>
+				<nav class="gallery-dots" aria-label="Elegir foto">
+					<button type="button" aria-label="Mostrar foto 1" aria-pressed="true"></button>
+					<button type="button" aria-label="Mostrar foto 2" aria-pressed="false"></button>
+					<button type="button" aria-label="Mostrar foto 3" aria-pressed="false"></button>
+					<button type="button" aria-label="Mostrar foto 4" aria-pressed="false"></button>
+					<button type="button" aria-label="Mostrar foto 5" aria-pressed="false"></button>
+					<button type="button" aria-label="Mostrar foto 6" aria-pressed="false"></button>
+				</nav>
+			</div>
+		</section>
+
+		<div class="scroll-hint" aria-hidden="true">no me importa cuanto dure con que sea contigo me conformo</div>
+		<footer class="keepsake">
+			<span class="keepsake__flower" aria-hidden="true">✿</span>
+			<span>Gracias por siempre ser la que hace mis dias hermosos</span>
+			<span class="keepsake__flower" aria-hidden="true">❀</span>
+		</footer>
+	</main>
+
+	<script>
+		const letterButton = document.querySelector('.open-letter');
+		const letter = document.querySelector('#love-letter');
+		const buttonText = document.querySelector('.open-letter__text');
+		const gallerySlides = [...document.querySelectorAll('.photo__slide')];
+		const galleryButtons = [...document.querySelectorAll('.gallery-dots button')];
+		let activeSlide = 0;
+
+		function showSlide(index) {
+			gallerySlides[activeSlide].classList.remove('is-active');
+			gallerySlides[activeSlide].setAttribute('aria-hidden', 'true');
+			galleryButtons[activeSlide].setAttribute('aria-pressed', 'false');
+			activeSlide = index;
+			gallerySlides[activeSlide].classList.add('is-active');
+			gallerySlides[activeSlide].setAttribute('aria-hidden', 'false');
+			galleryButtons[activeSlide].setAttribute('aria-pressed', 'true');
+		}
+
+		galleryButtons.forEach((button, index) => {
+			button.addEventListener('click', () => showSlide(index));
+		});
+
+		if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			window.setInterval(() => showSlide((activeSlide + 1) % gallerySlides.length), 4500);
+		}
+
+		letterButton.addEventListener('click', () => {
+			const isOpening = letter.hidden;
+			letter.hidden = !isOpening;
+			letterButton.setAttribute('aria-expanded', String(isOpening));
+			buttonText.textContent = isOpening ? 'Cerrar mi carta' : 'Abrir mi carta';
+
+			if (isOpening && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				for (let index = 0; index < 18; index += 1) {
+					const petal = document.createElement('span');
+					petal.className = 'petal';
+					petal.style.setProperty('--left', `${Math.random() * 100}vw`);
+					petal.style.setProperty('--delay', `${Math.random() * 1.2}s`);
+					petal.style.setProperty('--duration', `${3 + Math.random() * 2}s`);
+					petal.style.setProperty('--petal-color', index % 2 ? '#efc8dc' : '#d8c8e8');
+					document.body.append(petal);
+					petal.addEventListener('animationend', () => petal.remove(), { once: true });
+				}
+			}
+		});
+	</script>
+</body>
+</html>
